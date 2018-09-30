@@ -1,0 +1,149 @@
+.chrome-tabs {
+  box-sizing: content-box;
+  position: relative;
+  height: 28px;
+  padding: 0 0 5px 14px;
+  box-shadow: 0 0.6px #b7b7b7;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  display: flex;
+}
+.chrome-tabs .fixed-content {
+  flex: none;
+}
+.chrome-tabs .tabs-container-wrapper {
+  position: relative;
+  flex-basis: 0;
+  flex-grow: 1;
+}
+.chrome-tabs .chrome-tabs-bottom-bar {
+  position: absolute;
+  bottom: 0;
+  height: 0.45em;
+  left: 0;
+  width: 100%;
+  background: #f2f2f2;
+  box-shadow: 0 -0.05em rgba(0,0,0,0.27);
+}
+.chrome-tabs .chrome-tabs-content {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  overflow-y: hidden;
+  overflow-x: hidden;
+  display: block; /* for slick */
+  white-space: nowrap; /* for slick */
+  clip: rect(auto, auto, auto, auto);
+  box-sizing: border-box;
+  padding-left: 29px; /* overlay edge width + tab overlap */
+  padding-right: 15px; /* overlay edge width */
+  /* Mask that mostly works, except for the bottom bar shadow showing above the selected tab */
+  /* -webkit-mask: linear-gradient(to right, transparent, black 10px, black calc(100% - 10px), transparent); */
+}
+.chrome-tabs .chrome-tab {
+  position: relative;
+  align-items: center;
+  margin-left: -14px;
+  padding: 0 14px;
+  display: inline-flex;
+  height: 100%;
+}
+.chrome-tabs .chrome-tab,
+.chrome-tabs .chrome-tab * {
+  user-select: none;
+  cursor: default;
+}
+.chrome-tabs .chrome-tab .chrome-tab-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+}
+.chrome-tabs .chrome-tab .chrome-tab-background > svg {
+  width: 100%;
+  height: 100%;
+}
+.chrome-tabs .chrome-tab .chrome-tab-background > svg .chrome-tab-shadow {
+  fill: none;
+  stroke: rgba(0,0,0,0.27);
+  stroke-width: 0.5px;
+}
+.chrome-tabs .chrome-tab .chrome-tab-background > svg .chrome-tab-background {
+  fill: #d0d0d0;
+  transform: translateX(0.25px) translateY(0.25px);
+}
+.chrome-tabs .chrome-tab.chrome-tab-current .chrome-tab-background > svg .chrome-tab-background {
+  fill: #f2f2f2;
+}
+.chrome-tabs .chrome-tab.chrome-tab-transition-enter-active {
+  top: 10px;
+  animation: chrome-tab-transition-enter-active 120ms forwards ease-in-out;
+}
+@-moz-keyframes chrome-tab-transition-enter-active {
+  to {
+    top: 0;
+  }
+}
+@-webkit-keyframes chrome-tab-transition-enter-active {
+  to {
+    top: 0;
+  }
+}
+@-o-keyframes chrome-tab-transition-enter-active {
+  to {
+    top: 0;
+  }
+}
+@keyframes chrome-tab-transition-enter-active {
+  to {
+    top: 0;
+  }
+}
+.chrome-tabs .chrome-tab .chrome-tab-content {
+  display: flex;
+  position: relative;
+  align-items: center;
+  pointer-events: none;
+}
+.chrome-tabs .chrome-tab-close {
+  width: 1.2em;
+  height: 1.2em;
+  border-radius: 50%;
+  z-index: 2;
+}
+.chrome-tabs .chrome-tab-close::before {
+  content: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14'><path stroke='#5a5a5a' stroke-linecap='round' stroke-width='1.125' d='M4 4 L10 10 M10 4 L4 10'></path></svg>");
+}
+.chrome-tabs .chrome-tab-close:hover::before,
+.chrome-tabs .chrome-tab-close:hover:active::before {
+  content: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14'><path stroke='#fff' stroke-linecap='round' stroke-width='1.2' d='M4 4 L10 10 M10 4 L4 10'></path></svg>");
+}
+.chrome-tabs .chrome-tab-close:hover {
+  background: #e25c4b;
+}
+.chrome-tabs .chrome-tab-close:hover:active {
+  background: #b74a3b;
+}
+.chrome-tabs .tabs-container-edge-left,
+.chrome-tabs .tabs-container-edge-right {
+  display: inline-block;
+  width: 15px;
+  height: 100%;
+  pointer-events: none;
+  vertical-align: top;
+  position: absolute;
+}
+.chrome-tabs .tabs-container-edge-left {
+  left: 0;
+  /* background: linear-gradient(to right, #2c2c2c, transparent); */
+}
+.chrome-tabs .tabs-container-edge-right {
+  right: 0;
+  /* background-image: linear-gradient(to left, #2c2c2c, transparent); */
+}
+.chrome-tabs .chrome-tab.chrome-tab-transition-leave-active {
+  transition: margin-left .2s;
+  visibility: hidden;
+}

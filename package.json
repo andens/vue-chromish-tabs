@@ -1,0 +1,17 @@
+{
+  "name": "vue-chromish-tabs",
+  "version": "0.1.0",
+  "description": "Chrome-inspired tabs with horizontal scroll and client-defined contents.",
+  "author": {
+    "name": "Andreas Flöjt",
+    "email": "andenzz@hotmail.com"
+  },
+  "main": "src/ChromeTabs.vue",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "vue-slicksort": "git+https://github.com/andens/vue-slicksort.git#master"
+  }
+}
