@@ -57,8 +57,8 @@ because if not then for some reason it doesn't get the 100% width.
   overflow-y: hidden;
   overflow-x: hidden;
   box-sizing: border-box;
-  padding-left: 29px; /* overlay edge width + tab overlap */
-  padding-right: 15px; /* overlay edge width */
+  padding-left: 15px; /* overlay edge width */
+  padding-right: 29px; /* overlay edge width + tab overlap */
 }
 
 .chrome-tabs .dnd-list-item {
@@ -66,6 +66,7 @@ because if not then for some reason it doesn't get the 100% width.
   display: inline-block;
   height: 100%;
   vertical-align: top;
+  margin-right: -14px;
 }
 
 .chrome-tabs .dnd-helper-item {
@@ -76,7 +77,6 @@ because if not then for some reason it doesn't get the 100% width.
 .chrome-tabs .chrome-tab {
   position: relative;
   align-items: center;
-  margin-left: -14px;
   padding: 0 14px;
   display: inline-flex;
   height: 100%;
