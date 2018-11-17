@@ -44,10 +44,8 @@ prevent a scrollbar from showing up if the facade item is dragged outside.
 }
 
 /*
-The scroll container fills the complete tabs container. Absolute positioning it
-makes the clip property usable to prevent rendering the facade tab outside the
-container even if it's fixed positioned.
-https://stackoverflow.com/a/23859719
+The scroll container fills the complete tabs container. It's absolute positioned
+because if not then for some reason it doesn't get the 100% width.
 */
 .chrome-tabs .chrome-tabs-content {
   position: absolute;
@@ -55,9 +53,6 @@ https://stackoverflow.com/a/23859719
   height: 100%;
   overflow-y: hidden;
   overflow-x: hidden;
-  display: block; /* for slick */
-  white-space: nowrap; /* for slick */
-  clip: rect(auto, auto, auto, auto);
   box-sizing: border-box;
   padding-left: 29px; /* overlay edge width + tab overlap */
   padding-right: 15px; /* overlay edge width */
