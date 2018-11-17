@@ -3,43 +3,57 @@
     <div class="fixed-content">
       <slot name="fixed-content" />
     </div>
-    <!--
-      Wrap the tab container in a relative positioned flex item that spans
-      the remaining width, allowing it to be absolutely positioned, which in
-      turn makes the clip property usable to prevent rendering the dragged
-      tab outside the container even if fixed positioned.
-      https://stackoverflow.com/a/23859719
-    -->
     <div class="tabs-container-wrapper">
       <div class="tabs-container-edge-left" :style="`z-index: ${tabs.length + 3};`">
         &nbsp;
       </div>
-      <chrome-tabs-container
+      <!--
+        I tried some pre-existing dnd libraries, but they were usually limited
+        in some way. Some things they didn't cover well enough were:
+        * mid-transition swapping (linear, respect current progress)
+        * swap determination logic (swap when an edge crosses neighbor center)
+        * autoscroll behavior (outside container, limited speed)
+        * customizability (mostly animation control)
+        * avoid manipulating irrelevant items (don't transform all)
+        vue-dnd-list is not perfect, but it does a decent job making drag and
+        drop functionality work while at the same time playing nicely with Vue
+        DOM manipulations.
+      -->
+      <sortable-container
         ref="tabsContent"
         v-model="tabs"
-        axis="x"
-        lockAxis="x"
-        :transitionDuration=150
-        :distance=10
-        :appendHelperToContainer=true
-        :draggedSettlingDuration=150
-        @mousewheel.native="scrollTabs"
-        @sort-end="sortEnd"
+        orientation="x"
+        transitionName="chrome-tab-transition"
+        class="chrome-tabs-container"
+        scrollContainerClass="chrome-tabs-content"
+        itemKeyProperty="id"
+        :activationDistance=10
+        :helperZ="tabs.length + 2"
+        :maxItemTransitionDuration=150
+        :scrollContainerEvents="{
+          'mousewheel': scrollTabs, // Originally: @mousewheel.native='...'
+        }"
+        :lockAxis=true
       >
+        <!-- slot-scope injects data from vue-dnd-list into this slot content -->
         <chrome-tab
-          v-for="(tab, index) in tabs" :key="tab.id"
-          ref="tabs"
-          :index="index"
-          :class="{ 'chrome-tab-current': selected === tab }"
-          :style="`z-index: ${selected === tab ? tabs.length + 2 : tabs.length - index};`"
+          slot-scope="{listItem: tab, index, isGhost, isHelper, sorting, settling, startDrag}"
+          :class="{ 'chrome-tab-current': selected === tab, 'ghost': isGhost && (sorting || settling) }"
+          :style="{
+            zIndex: `${selected === tab || isHelper ? tabs.length + 2 : tabs.length - index}`,
+          }"
           @auxclick.middle.native="closeTab(index)"
           @mousedown.middle.native.prevent.stop
-          @mousedown.left.native="selectTab(index)"
+          @mousedown.left.native.prevent="e => {
+            selectTab(index);
+            startDrag(e);
+          }"
           @close="closeTab(index)"
         >
+          <!-- Include user tab content, passing tab data to the user -->
           <slot v-bind="tab.data" />
         </chrome-tab>
-      </chrome-tabs-container>
+      </sortable-container>
       <div class="tabs-container-edge-right" :style="`z-index: ${tabs.length + 3};`">
         &nbsp;
       </div>
@@ -49,31 +63,10 @@
 </template>
 
 <script>
-import { ContainerMixin, ElementMixin } from "vue-slicksort";
-
-const ChromeTabsContainer = {
-  mixins: [ContainerMixin],
-  template: `
-    <transition-group
-      name="chrome-tab-transition"
-      tag="div"
-      class="chrome-tabs-content"
-      @beforeLeave="beforeLeave"
-    >
-      <slot />
-    </transition-group>
-  `,
-  methods: {
-    beforeLeave(el) {
-      // When an element is removed from the transition group, set the margin
-      // to the element width, which will then be transitioned in CSS.
-      el.style.marginLeft = `-${el.offsetWidth}px`;
-    },
-  },
-};
+import SortableContainer from "vue-dnd-list";
 
 const ChromeTab = {
-  mixins: [ElementMixin],
+  // The tab side slant has a 14:29 ratio.
   template: `
     <div class="chrome-tab">
       <div class="chrome-tab-background">
@@ -130,10 +123,12 @@ export default {
       event.preventDefault();
       event.stopPropagation();
 
+      const scrollContainer = this.$refs.tabsContent.getScrollContainer();
+
       // If we are not already scrolling, reset the targetScrollPosition because
       // we might have autoscrolled by dragging tabs.
       if (!this.scroll.animationFrameId) {
-        this.scroll.targetScrollPosition = this.$refs.tabsContent.$el.scrollLeft;
+        this.scroll.targetScrollPosition = scrollContainer.scrollLeft;
       }
 
       // Early exit: scroll left while at leftmost end.
@@ -142,7 +137,7 @@ export default {
       }
 
       // Early exit: scroll right while at rightmost end.
-      if (this.scroll.targetScrollPosition >= (this.$refs.tabsContent.$el.scrollWidth - this.$refs.tabsContent.$el.clientWidth) && event.deltaY > 0) {
+      if (this.scroll.targetScrollPosition >= (scrollContainer.scrollWidth - scrollContainer.clientWidth) && event.deltaY > 0) {
         return;
       }
 
@@ -159,19 +154,20 @@ export default {
       // scrolling, the delta is recalculated and the iteration count is reset
       // to give enough iterations to reach the target.
       this.scroll.targetScrollPosition += event.deltaY;
-      let delta = this.scroll.targetScrollPosition - this.$refs.tabsContent.$el.scrollLeft;
+      let delta = this.scroll.targetScrollPosition - scrollContainer.scrollLeft;
       this.scroll.scrollDelta = Math.sign(delta) * Math.max(Math.abs(delta), 100) / iterationCount;
       this.scroll.iteration = 0;
 
       let self = this;
 
       function doScroll() {
-        self.$refs.tabsContent.$el.scrollLeft += self.scroll.scrollDelta;
+        scrollContainer.scrollLeft += self.scroll.scrollDelta;
+        self.$refs.tabsContent.synchronizeHelperTranslation();
 
         if (++self.scroll.iteration === iterationCount) {
           cancelAnimationFrame(self.scroll.animationFrameId);
           self.scroll.animationFrameId = null;
-          self.scroll.targetScrollPosition = self.$refs.tabsContent.$el.scrollLeft;
+          self.scroll.targetScrollPosition = scrollContainer.scrollLeft;
           self.scroll.iteration = 0;
         }
         else {
@@ -225,7 +221,7 @@ export default {
           this.selectTab(index + 1);
         }
       }
-      
+
       let deleted = this.tabs.splice(index, 1);
 
       this.$emit("close", {
@@ -233,16 +229,10 @@ export default {
         data: deleted[0].data,
       });
     },
-
-    sortEnd({oldIndex, newIndex}) {
-      if (oldIndex !== newIndex) {
-        this.$emit("move", { oldIndex, newIndex });
-      }
-    },
   },
 
   components: {
-    ChromeTabsContainer,
+    SortableContainer,
     ChromeTab,
   },
 }

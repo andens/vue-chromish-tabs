@@ -12,6 +12,6 @@
   },
   "license": "MIT",
   "dependencies": {
-    "vue-slicksort": "git+https://github.com/andens/vue-slicksort.git#master"
+    "vue-dnd-list": "git+https://github.com/andens/vue-dnd-list.git#master"
   }
 }
