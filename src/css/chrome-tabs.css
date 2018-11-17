@@ -134,6 +134,7 @@
   pointer-events: none;
   vertical-align: top;
   position: absolute;
+  top: 0;
 }
 .chrome-tabs .tabs-container-edge-left {
   left: 0;
