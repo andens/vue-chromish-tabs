@@ -182,11 +182,6 @@ because if not then for some reason it doesn't get the 100% width.
   background: #b74a3b;
 }
 
-.chrome-tabs .chrome-tab.chrome-tab-transition-leave-active {
-  transition: margin-left .2s;
-  visibility: hidden;
-}
-
 .chrome-tabs .dnd-list-item:not(.dnd-helper-item).chrome-tab-transition-move {
   transition: transform;
   transition-timing-function: linear;
