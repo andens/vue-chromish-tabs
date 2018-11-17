@@ -100,11 +100,15 @@ because if not then for some reason it doesn't get the 100% width.
   height: 100%;
   overflow: hidden;
   pointer-events: none;
+  display: flex;
 }
 
-.chrome-tabs .chrome-tab .chrome-tab-background > svg {
-  width: 100%;
+.chrome-tabs .chrome-tab .chrome-tab-background > svg.edge-piece {
   height: 100%;
+}
+
+.chrome-tabs .chrome-tab .chrome-tab-background > svg.middle {
+  flex-grow: 1;
 }
 
 .chrome-tabs .chrome-tab .chrome-tab-background > svg .chrome-tab-shadow {

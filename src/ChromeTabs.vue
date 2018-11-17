@@ -63,29 +63,28 @@ const ChromeTab = {
   // The tab side slant has a 14:29 ratio.
   template: `
     <div class="chrome-tab">
+      <!-- Adapted from https://stackoverflow.com/questions/26028370/multiple-aspect-ratios-in-a-single-svg -->
+      <!-- This works fine with changing width as long as the height remains fixed, but that is intended for the tabs anyway -->
+      <!-- This works by defining a source image and then rendering parts of it in three pieces, where the middle piece consumes remaining flexbox space and is stretched without preserving aspect ratio -->
       <div class="chrome-tab-background">
-        <svg version="1.1" xmlns="http://www.w3.org/2000/svg">
+        <svg width="0" height="0" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
           <defs>
-            <symbol id="chrome-tab-geometry-left" viewBox="0 0 214 29">
-              <path d="M14.3 0.1L214 0.1 214 29 0 29C0 29 12.2 2.6 13.2 1.1 14.3-0.4 14.3 0.1 14.3 0.1Z"/>
-            </symbol>
-            <symbol id="chrome-tab-geometry-right" viewBox="0 0 214 29">
-              <use xlink:href="#chrome-tab-geometry-left"/>
-            </symbol>
-            <clipPath id="crop">
-              <rect class="mask" width="100%" height="100%" x="0"/>
-            </clipPath>
+            <g id="source">
+              <path d="M0,29h57l-14,-29h-29z"/>
+            </g>
           </defs>
-          <svg width="50%" height="100%">
-            <use xlink:href="#chrome-tab-geometry-left" width="214" height="29" class="chrome-tab-background"/>
-            <use xlink:href="#chrome-tab-geometry-left" width="214" height="29" class="chrome-tab-shadow"/>
-          </svg>
-          <g transform="scale(-1, 1)">
-            <svg width="50%" height="100%" x="-100%" y="0">
-              <use xlink:href="#chrome-tab-geometry-right" width="214" height="29" class="chrome-tab-background"/>
-              <use xlink:href="#chrome-tab-geometry-right" width="214" height="29" class="chrome-tab-shadow"/>
-            </svg>
-          </g>
+        </svg>
+        <svg class="edge-piece" viewBox="0 0 14 29">
+          <use xlink:href="#source" class="chrome-tab-background"/>
+          <use xlink:href="#source" class="chrome-tab-shadow"/>
+        </svg>
+        <svg class="middle" viewBox="14 0 29 29" preserveAspectRatio="none">
+          <use xlink:href="#source" class="chrome-tab-background"/>
+          <use xlink:href="#source" class="chrome-tab-shadow"/>
+        </svg>
+        <svg class="edge-piece" viewBox="43 0 14 29">
+          <use xlink:href="#source" class="chrome-tab-background"/>
+          <use xlink:href="#source" class="chrome-tab-shadow"/>
         </svg>
       </div>
       <div class="chrome-tab-content">
