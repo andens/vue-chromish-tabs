@@ -41,6 +41,9 @@ prevent a scrollbar from showing up if the facade item is dragged outside.
   /* Prevent facade item from wrapping its white space as it reaches either end
   of the scroll container */
   white-space: nowrap;
+
+  /* Mask that mostly works, except for the bottom bar shadow showing above the selected tab due to mask creating a stacking context */
+  -webkit-mask: linear-gradient(to right, transparent, black 15px, black calc(100% - 15px), transparent);
 }
 
 /*
@@ -56,8 +59,6 @@ because if not then for some reason it doesn't get the 100% width.
   box-sizing: border-box;
   padding-left: 29px; /* overlay edge width + tab overlap */
   padding-right: 15px; /* overlay edge width */
-  /* Mask that mostly works, except for the bottom bar shadow showing above the selected tab */
-  /* -webkit-mask: linear-gradient(to right, transparent, black 10px, black calc(100% - 10px), transparent); */
 }
 
 .chrome-tabs .dnd-list-item {
@@ -179,27 +180,6 @@ because if not then for some reason it doesn't get the 100% width.
 
 .chrome-tabs .chrome-tab-close:hover:active {
   background: #b74a3b;
-}
-
-.chrome-tabs .tabs-container-edge-left,
-.chrome-tabs .tabs-container-edge-right {
-  display: inline-block;
-  width: 15px;
-  height: 100%;
-  pointer-events: none;
-  vertical-align: top;
-  position: absolute;
-  top: 0;
-}
-
-.chrome-tabs .tabs-container-edge-left {
-  left: 0;
-  /* background: linear-gradient(to right, #2c2c2c, transparent); */
-}
-
-.chrome-tabs .tabs-container-edge-right {
-  right: 0;
-  /* background-image: linear-gradient(to left, #2c2c2c, transparent); */
 }
 
 .chrome-tabs .chrome-tab.chrome-tab-transition-leave-active {

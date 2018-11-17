@@ -4,9 +4,6 @@
       <slot name="fixed-content" />
     </div>
     <div class="tabs-container-wrapper">
-      <div class="tabs-container-edge-left" :style="`z-index: ${tabs.length + 3};`">
-        &nbsp;
-      </div>
       <!--
         I tried some pre-existing dnd libraries, but they were usually limited
         in some way. Some things they didn't cover well enough were:
@@ -54,9 +51,6 @@
           <slot v-bind="tab.data" />
         </chrome-tab>
       </sortable-container>
-      <div class="tabs-container-edge-right" :style="`z-index: ${tabs.length + 3};`">
-        &nbsp;
-      </div>
     </div>
     <div class="chrome-tabs-bottom-bar" :style="`z-index: ${tabs.length + 1}`"></div>
   </div>
