@@ -57,10 +57,20 @@ because if not then for some reason it doesn't get the 100% width.
   overflow-y: hidden;
   overflow-x: hidden;
   box-sizing: border-box;
-  padding-left: 15px; /* overlay edge width */
   padding-right: 29px; /* overlay edge width + tab overlap */
   display: flex;
   flex-direction: row-reverse;
+}
+
+/*
+Using justify-content: flex-end on the scroll container prevents scrolling from
+working due to a bug. This pseudo element gives the same effect by shifting the
+tabs to the left by having as large a right margin as it can.
+https://stackoverflow.com/a/37515194
+*/
+.chrome-tabs .chrome-tabs-content::before {
+  content: "";
+  margin-right: auto !important;
 }
 
 .chrome-tabs .dnd-list-item {
@@ -76,7 +86,6 @@ from shrinking to fit tabs when the last one is in transition.
 */
 .chrome-tabs .dnd-terminator {
   min-width: 15px; /* Match edge mask width */
-  margin-left: 14px; /* Cancel the tab negative margin */
   visibility: collapse; /* Don't show, but respect size for flexbox size */
 }
 
