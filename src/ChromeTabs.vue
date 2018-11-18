@@ -32,6 +32,7 @@
           'mousewheel': scrollTabs, // Originally: @mousewheel.native='...'
         }"
         :lockAxis=true
+        :list-terminator=true
         @sort-end="sortEnd"
       >
         <!-- slot-scope injects data from vue-dnd-list into this slot content -->

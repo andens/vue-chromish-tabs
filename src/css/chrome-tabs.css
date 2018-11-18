@@ -59,14 +59,24 @@ because if not then for some reason it doesn't get the 100% width.
   box-sizing: border-box;
   padding-left: 15px; /* overlay edge width */
   padding-right: 29px; /* overlay edge width + tab overlap */
+  display: flex;
 }
 
 .chrome-tabs .dnd-list-item {
   position: relative;
-  display: inline-block;
   height: 100%;
   vertical-align: top;
   margin-right: -14px;
+}
+
+/*
+An invisible item at the end of the scroll container to prevent the flexbox
+from shrinking to fit tabs when the last one is in transition.
+*/
+.chrome-tabs .dnd-terminator {
+  min-width: 15px; /* Match edge mask width */
+  margin-left: 14px; /* Cancel the tab negative margin */
+  visibility: collapse; /* Don't show, but respect size for flexbox size */
 }
 
 .chrome-tabs .dnd-helper-item {
