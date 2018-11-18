@@ -1,5 +1,4 @@
 .chrome-tabs {
-  box-sizing: content-box;
   position: relative;
   height: 28px;
   padding: 0 0 5px 14px;
@@ -21,11 +20,12 @@
 .chrome-tabs .chrome-tabs-bottom-bar {
   position: absolute;
   bottom: 0;
-  height: 0.45em;
+  height: 5px;
   left: 0;
   width: 100%;
   background: #f2f2f2;
-  box-shadow: 0 -0.05em rgba(0,0,0,0.27);
+  border-top: 1px solid rgba(0,0,0,0.27);
+  box-sizing: content-box;
 }
 
 /*
@@ -38,11 +38,11 @@ prevent a scrollbar from showing up if the facade item is dragged outside.
   height: 100%;
   width: 100%;
   overflow: hidden;
+  box-sizing: border-box;
   /* Prevent facade item from wrapping its white space as it reaches either end
   of the scroll container */
   white-space: nowrap;
-
-  /* Mask that mostly works, except for the bottom bar shadow showing above the selected tab due to mask creating a stacking context */
+  /* Note to self: mask creates a stacking context, which earlier caused the bottom bar shadow to be shown */
   -webkit-mask: linear-gradient(to right, transparent, black 15px, black calc(100% - 15px), transparent);
 }
 
@@ -98,7 +98,6 @@ because if not then for some reason it doesn't get the 100% width.
   left: 0;
   width: 100%;
   height: 100%;
-  overflow: hidden;
   pointer-events: none;
   display: flex;
 }
@@ -114,12 +113,17 @@ because if not then for some reason it doesn't get the 100% width.
 .chrome-tabs .chrome-tab .chrome-tab-background > svg .chrome-tab-shadow {
   fill: none;
   stroke: rgba(0,0,0,0.27);
-  stroke-width: 0.5px;
+  stroke-width: 1px;
+}
+
+.chrome-tabs .chrome-tab.chrome-tab-current .chrome-tab-background > svg .chrome-tab-shadow {
+  /* Values match svg geometry lengths */
+  stroke-dashoffset: 93;
+  stroke-dasharray: 93 57;
 }
 
 .chrome-tabs .chrome-tab .chrome-tab-background > svg .chrome-tab-background {
   fill: #d0d0d0;
-  transform: translateX(0.25px) translateY(0.25px);
 }
 
 .chrome-tabs .chrome-tab.chrome-tab-current .chrome-tab-background > svg .chrome-tab-background {

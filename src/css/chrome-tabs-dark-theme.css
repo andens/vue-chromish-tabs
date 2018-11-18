@@ -4,7 +4,7 @@
 }
 .chrome-tabs.chrome-tabs-dark-theme .chrome-tabs-bottom-bar {
   background: #505050;
-  box-shadow: 0 -0.05em rgba(0,0,0,0.5);
+  border-top: 1px solid rgba(0,0,0,0.5);
 }
 .chrome-tabs.chrome-tabs-dark-theme .chrome-tab .chrome-tab-background > svg .chrome-tab-shadow {
   stroke: rgba(0,0,0,0.5);
@@ -21,10 +21,4 @@
 }
 .chrome-tabs.chrome-tabs-dark-theme .chrome-tab .chrome-tab-close:not(:hover)::before {
   content: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14'><path stroke='#cfcfcf' stroke-linecap='round' stroke-width='1.125' d='M4 4 L10 10 M10 4 L4 10'></path></svg>");
-}
-.chrome-tabs.chrome-tabs-dark-theme .tabs-container-edge-left {
-  background: linear-gradient(to right, #1b1d1f, transparent);
-}
-.chrome-tabs.chrome-tabs-dark-theme .tabs-container-edge-right {
-  background-image: linear-gradient(to left, #1b1d1f, transparent);
 }

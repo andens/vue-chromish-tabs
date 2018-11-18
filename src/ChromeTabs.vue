@@ -3,6 +3,7 @@
     <div class="fixed-content">
       <slot name="fixed-content" />
     </div>
+    <div class="chrome-tabs-bottom-bar"></div>
     <div class="tabs-container-wrapper">
       <!--
         I tried some pre-existing dnd libraries, but they were usually limited
@@ -52,7 +53,6 @@
         </chrome-tab>
       </sortable-container>
     </div>
-    <div class="chrome-tabs-bottom-bar" :style="`z-index: ${tabs.length + 1}`"></div>
   </div>
 </template>
 
@@ -75,15 +75,15 @@ const ChromeTab = {
           </defs>
         </svg>
         <svg class="edge-piece" viewBox="0 0 14 29">
-          <use xlink:href="#source" class="chrome-tab-background"/>
+          <use y="1" xlink:href="#source" class="chrome-tab-background"/>
           <use xlink:href="#source" class="chrome-tab-shadow"/>
         </svg>
         <svg class="middle" viewBox="14 0 29 29" preserveAspectRatio="none">
-          <use xlink:href="#source" class="chrome-tab-background"/>
+          <use y="1" xlink:href="#source" class="chrome-tab-background"/>
           <use xlink:href="#source" class="chrome-tab-shadow"/>
         </svg>
         <svg class="edge-piece" viewBox="43 0 14 29">
-          <use xlink:href="#source" class="chrome-tab-background"/>
+          <use y="1" xlink:href="#source" class="chrome-tab-background"/>
           <use xlink:href="#source" class="chrome-tab-shadow"/>
         </svg>
       </div>
