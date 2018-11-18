@@ -60,6 +60,7 @@ because if not then for some reason it doesn't get the 100% width.
   padding-left: 15px; /* overlay edge width */
   padding-right: 29px; /* overlay edge width + tab overlap */
   display: flex;
+  flex-direction: row-reverse;
 }
 
 .chrome-tabs .dnd-list-item {
@@ -96,6 +97,10 @@ from shrinking to fit tabs when the last one is in transition.
 .chrome-tabs .chrome-tab * {
   user-select: none;
   cursor: default;
+}
+
+.chrome-tabs .chrome-tab.chrome-tab-current {
+  z-index: 1;
 }
 
 .chrome-tabs .chrome-tab.ghost {
@@ -180,7 +185,7 @@ from shrinking to fit tabs when the last one is in transition.
   width: 1.2em;
   height: 1.2em;
   border-radius: 50%;
-  z-index: 2;
+  position: relative;
 }
 
 .chrome-tabs .chrome-tab-close::before {

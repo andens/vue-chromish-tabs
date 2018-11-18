@@ -26,22 +26,19 @@
         scrollContainerClass="chrome-tabs-content"
         itemKeyProperty="id"
         :activationDistance=10
-        :helperZ="tabs.length + 2"
         :maxItemTransitionDuration=150
         :scrollContainerEvents="{
           'mousewheel': scrollTabs, // Originally: @mousewheel.native='...'
         }"
         :lockAxis=true
         :list-terminator=true
+        :reverse-rendering=true
         @sort-end="sortEnd"
       >
         <!-- slot-scope injects data from vue-dnd-list into this slot content -->
         <chrome-tab
           slot-scope="{listItem: tab, index, isGhost, isHelper, sorting, settling, startDrag}"
           :class="{ 'chrome-tab-current': selected === tab, 'ghost': isGhost && (sorting || settling) }"
-          :style="{
-            zIndex: `${selected === tab || isHelper ? tabs.length + 2 : tabs.length - index}`,
-          }"
           @auxclick.middle.native="closeTab(index)"
           @mousedown.middle.native.prevent.stop
           @mousedown.left.native.prevent="e => {
