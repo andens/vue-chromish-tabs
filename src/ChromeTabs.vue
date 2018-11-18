@@ -19,7 +19,7 @@
       -->
       <sortable-container
         ref="tabsContent"
-        v-model="tabs"
+        v-model="reversedTabs"
         orientation="x"
         transitionName="chrome-tab-transition"
         class="chrome-tabs-container"
@@ -35,20 +35,25 @@
         :reverse-rendering=true
         @sort-end="sortEnd"
       >
-        <!-- slot-scope injects data from vue-dnd-list into this slot content -->
+        <!--
+          slot-scope injects data from vue-dnd-list into this slot content.
+          Remember that since we have passed reversed tabs to vue-dnd-list, we
+          get reversed indices back. That's why `index` below is reversed again
+          instead of used directly.
+        -->
         <chrome-tab
           slot-scope="{listItem: tab, index, isGhost, isHelper, sorting, settling, startDrag}"
           :class="{ 'chrome-tab-current': selected === tab, 'ghost': isGhost && (sorting || settling) }"
-          @auxclick.middle.native="closeTab(index)"
+          @auxclick.middle.native="closeTab(tabs.length - index - 1)"
           @mousedown.middle.native.prevent.stop
           @mousedown.left.native.prevent="e => {
             if (canSelectTab) {
-              selectTab(index);
+              selectTab(tabs.length - index - 1);
               startDrag(e);
               canSelectTab = false;
             }
           }"
-          @close="closeTab(index)"
+          @close="closeTab(tabs.length - index - 1)"
         >
           <!-- Include user tab content, passing tab data to the user -->
           <slot v-bind="tab.data" />
@@ -112,6 +117,17 @@ export default {
       accumulatedTabCount: 0,
       canSelectTab: true,
     }
+  },
+
+  computed: {
+    reversedTabs: {
+      get() {
+        return this.tabs.slice().reverse();
+      },
+      set(newValue) {
+        this.tabs = newValue.slice().reverse();
+      },
+    },
   },
 
   methods: {
