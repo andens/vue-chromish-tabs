@@ -32,6 +32,7 @@
           'mousewheel': scrollTabs, // Originally: @mousewheel.native='...'
         }"
         :lockAxis=true
+        @sort-end="sortEnd"
       >
         <!-- slot-scope injects data from vue-dnd-list into this slot content -->
         <chrome-tab
@@ -43,8 +44,11 @@
           @auxclick.middle.native="closeTab(index)"
           @mousedown.middle.native.prevent.stop
           @mousedown.left.native.prevent="e => {
-            selectTab(index);
-            startDrag(e);
+            if (canSelectTab) {
+              selectTab(index);
+              startDrag(e);
+              canSelectTab = false;
+            }
           }"
           @close="closeTab(index)"
         >
@@ -108,6 +112,7 @@ export default {
       selected: null,
       draggabillyInstances: [],
       accumulatedTabCount: 0,
+      canSelectTab: true,
     }
   },
 
@@ -221,6 +226,10 @@ export default {
         index: index,
         data: deleted[0].data,
       });
+    },
+
+    sortEnd() {
+      this.canSelectTab = true;
     },
   },
 
