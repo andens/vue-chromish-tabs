@@ -246,6 +246,12 @@ export default {
         index: index,
         data: deleted[0].data,
       });
+
+      // Keep the same scroll position when removing tabs.
+      const { scrollLeft } = this.$refs.tabsContent.getScrollContainer();
+      this.$nextTick(() => {
+        this.$refs.tabsContent.getScrollContainer().scrollLeft = scrollLeft;
+      });
     },
 
     sortEnd() {
