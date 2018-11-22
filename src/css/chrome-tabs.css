@@ -228,3 +228,13 @@ from shrinking to fit tabs when the last one is in transition.
   /* override the inline style holding the drop offset set by JS */
   transform: translate3d(0, 0, 0) !important;
 }
+
+/*
+Due to the internal transition component, when dnd items are removed a copy of
+them is appended to the container for the leave transition. This causes a kind
+of flickering artifact as the item essentially becomes an extra tab to the left
+(reversed rendering) for one frame.
+*/
+.chrome-tabs .dnd-list-item:not(.dnd-helper-item).chrome-tab-transition-leave-active {
+  display: none;
+}
