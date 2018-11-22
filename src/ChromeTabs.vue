@@ -199,6 +199,12 @@ export default {
       if (select) {
         this.selectTab(this.tabs.length - 1);
       }
+
+      // Keep the same scroll position when adding tabs.
+      const { scrollLeft } = this.$refs.tabsContent.getScrollContainer();
+      this.$nextTick(() => {
+        this.$refs.tabsContent.getScrollContainer().scrollLeft = scrollLeft;
+      });
     },
 
     selectTab(index) {
