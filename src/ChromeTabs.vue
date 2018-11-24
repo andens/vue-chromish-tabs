@@ -43,7 +43,7 @@
         -->
         <chrome-tab
           slot-scope="{listItem: tab, index, isGhost, isHelper, sorting, settling, startDrag}"
-          :class="{ 'chrome-tab-current': selected === tab, 'ghost': isGhost && (sorting || settling) }"
+          :class="{ 'chrome-tab-current': selected === tab, 'ghost': isGhost && (sorting || settling), 'chrome-tab-transition-enter-active': tab.animateEnter }"
           @auxclick.middle.native="closeTab(tabs.length - index - 1)"
           @mousedown.middle.native.prevent.stop
           @mousedown.left.native.prevent="e => {
@@ -54,6 +54,7 @@
             }
           }"
           @close="closeTab(tabs.length - index - 1)"
+          @animationend.native="tab.animateEnter = false"
         >
           <!-- Include user tab content, passing tab data to the user -->
           <slot v-bind="tab.data" />
@@ -196,7 +197,7 @@ export default {
 
     // Intended to be called by user
     addTab(customData, select = true) {
-      let t = { id: this.accumulatedTabCount++, data: customData };
+      let t = { id: this.accumulatedTabCount++, animateEnter: true, data: customData };
       this.tabs.push(t);
       if (select) {
         this.selectTab(this.tabs.length - 1);

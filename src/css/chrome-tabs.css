@@ -168,8 +168,8 @@ from shrinking to fit tabs when the last one is in transition.
 }
 
 .chrome-tabs .chrome-tab.chrome-tab-transition-enter-active {
-  top: 10px;
-  animation: chrome-tab-transition-enter-active 120ms forwards ease-in-out;
+  top: 100%;
+  animation: chrome-tab-transition-enter-active 50ms forwards ease-in-out;
 }
 
 @-moz-keyframes chrome-tab-transition-enter-active {
