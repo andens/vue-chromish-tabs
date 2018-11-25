@@ -83,6 +83,7 @@ https://stackoverflow.com/a/37515194
   shifting when adding tabs: https://stackoverflow.com/a/45234850
   */
   display: inline-table;
+  transition: margin-right 200ms;
 }
 
 /*
@@ -194,6 +195,11 @@ from shrinking to fit tabs when the last one is in transition.
   to {
     top: 0;
   }
+}
+
+.chrome-tabs .chrome-tab.chrome-tab-transition-leave-active .chrome-tab-flex {
+  transition: all 200ms;
+  transform: translateX(calc(-100% - 14px));
 }
 
 .chrome-tabs .chrome-tab .chrome-tab-content {

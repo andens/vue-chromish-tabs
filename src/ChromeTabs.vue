@@ -43,7 +43,12 @@
         -->
         <chrome-tab
           slot-scope="{listItem: tab, index, isGhost, isHelper, sorting, settling, startDrag}"
-          :class="{ 'chrome-tab-current': selected === tab, 'ghost': isGhost && (sorting || settling), 'chrome-tab-transition-enter-active': tab.animateEnter }"
+          :class="{
+            'chrome-tab-current': selected === tab,
+            'ghost': isGhost && (sorting || settling),
+            'chrome-tab-transition-enter-active': tab.animateEnter,
+            'chrome-tab-transition-leave-active': tab.transitionLeave,
+          }"
           @auxclick.middle.native="closeTab(tabs.length - index - 1)"
           @mousedown.middle.native.prevent.stop
           @mousedown.left.native.prevent="e => {
@@ -65,6 +70,7 @@
 </template>
 
 <script>
+import Vue from "vue";
 import SortableContainer from "vue-dnd-list";
 
 const ChromeTab = {
@@ -119,6 +125,7 @@ export default {
       draggabillyInstances: [],
       accumulatedTabCount: 0,
       canSelectTab: true,
+      leaveDuration: 200,
     }
   },
 
@@ -243,17 +250,41 @@ export default {
         }
       }
 
-      let deleted = this.tabs.splice(index, 1);
+      const tabNode = this.$refs.tabsContent.nodeTracker.getNodes()[this.tabs.length - index - 1];
+      Vue.set(tab, "style", {
+        // When a tab is closed, its inner content is shifted. Normally, the
+        // overflow would be cut off, which is just fine for non-leftmost tabs
+        // because they lie beneath another tab anyway. However, for the left-
+        // most tab, this looks bad. Instead we mask a smooth exit. An area is
+        // added to the left, adjusting the margin to compensate for it. When
+        // tab content is shifted, a mask makes the content disappear smoothly.
+        'padding-left': '14px',
+        'margin-left': '-14px',
+        '-webkit-mask': 'linear-gradient(to right, transparent, black 14px)',
+        // Transition the margin to make following tabs shift as well.
+        'margin-right': `-${tabNode.offsetWidth}px`,
+      });
+
+      Vue.set(tab, "transitionLeave", true);
+
+      setTimeout(() => {
+        // This should probably be fast enough for the internal implementation
+        // to just compare references...
+        const index = this.tabs.indexOf(tab);
+        if (index !== -1) {
+          let deleted = this.tabs.splice(index, 1);
+
+          // Keep the same scroll position when removing tabs.
+          const { scrollLeft } = this.$refs.tabsContent.getScrollContainer();
+          this.$nextTick(() => {
+            this.$refs.tabsContent.getScrollContainer().scrollLeft = scrollLeft;
+          });
+        }
+      }, this.leaveDuration);
 
       this.$emit("close", {
         index: index,
-        data: deleted[0].data,
-      });
-
-      // Keep the same scroll position when removing tabs.
-      const { scrollLeft } = this.$refs.tabsContent.getScrollContainer();
-      this.$nextTick(() => {
-        this.$refs.tabsContent.getScrollContainer().scrollLeft = scrollLeft;
+        data: tab.data,
       });
     },
 

@@ -18,6 +18,12 @@ __
 
 The opening animation is simply done by applying the animation class and removing it when the animation is done.
 
+The closing transition is more complicated.
+A negative margin is set in JS according to the tab width to have the following items shift into place.
+While doing this, the tab content is itself shifted.
+This looks like the entire tab is shifted, but it stays in place, which allows using a mask to prevent larger tabs from going through smaller ones and the leftmost tab to not be abruptly cut off.
+A timeout removes the tab when the transition is over.
+
 ## Notes to self
 
 * I had some issues with popping z-index as the dragged tab was dropped.
