@@ -242,7 +242,14 @@ export default {
         }
         // Closing rightmost tab: select previous
         else if (index + 1 === this.tabs.length) {
-          this.selectTab(index - 1);
+          let newIndex = index;
+          while (--newIndex >= 0) {
+            if (!this.tabs[newIndex].transitionLeave) {
+              break;
+            }
+          }
+          newIndex = newIndex >= 0 ? newIndex : null;
+          this.selectTab(newIndex);
         }
         // Next tab takes the place of the closed one
         else {
