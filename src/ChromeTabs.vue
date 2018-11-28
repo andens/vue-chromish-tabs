@@ -234,6 +234,35 @@ export default {
     },
 
     closeTab(index) {
+      let selectToTheRight = index => {
+        let len = this.tabs.length;
+        let newIndex = index;
+        while (++newIndex < len) {
+          if (!this.tabs[newIndex].transitionLeave) {
+            break;
+          }
+        }
+        if (newIndex < len) {
+          this.selectTab(newIndex);
+          return true;
+        }
+        return false;
+      };
+
+      let selectToTheLeft = index => {
+        let newIndex = index;
+        while (--newIndex >= 0) {
+          if (!this.tabs[newIndex].transitionLeave) {
+            break;
+          }
+        }
+        if (newIndex >= 0) {
+          this.selectTab(newIndex);
+          return true;
+        }
+        return false;
+      };
+
       let tab = this.tabs[index];
       if (this.selected === tab) {
         // Closing last tab: no selection
@@ -242,26 +271,17 @@ export default {
         }
         // Closing rightmost tab: select previous
         else if (index + 1 === this.tabs.length) {
-          let newIndex = index;
-          while (--newIndex >= 0) {
-            if (!this.tabs[newIndex].transitionLeave) {
-              break;
-            }
+          if (!selectToTheLeft(index)) {
+            this.selectTab(null);
           }
-          newIndex = newIndex >= 0 ? newIndex : null;
-          this.selectTab(newIndex);
         }
         // Next tab takes the place of the closed one
         else {
-          let len = this.tabs.length;
-          let newIndex = index;
-          while (++newIndex < len) {
-            if (!this.tabs[newIndex].transitionLeave) {
-              break;
+          if (!selectToTheRight(index)) {
+            if (!selectToTheLeft(index)) {
+              this.selectTab(null);
             }
           }
-          newIndex = newIndex < len ? newIndex : null;
-          this.selectTab(newIndex);
         }
       }
 
