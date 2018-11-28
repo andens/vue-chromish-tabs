@@ -253,7 +253,15 @@ export default {
         }
         // Next tab takes the place of the closed one
         else {
-          this.selectTab(index + 1);
+          let len = this.tabs.length;
+          let newIndex = index;
+          while (++newIndex < len) {
+            if (!this.tabs[newIndex].transitionLeave) {
+              break;
+            }
+          }
+          newIndex = newIndex < len ? newIndex : null;
+          this.selectTab(newIndex);
         }
       }
 
