@@ -263,6 +263,8 @@ export default {
         '-webkit-mask': 'linear-gradient(to right, transparent, black 14px)',
         // Transition the margin to make following tabs shift as well.
         'margin-right': `-${tabNode.offsetWidth}px`,
+        // Allow click-through to tabs that slide in beneath.
+        'pointer-events': 'none',
       });
 
       Vue.set(tab, "transitionLeave", true);
