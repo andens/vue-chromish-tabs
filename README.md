@@ -16,7 +16,9 @@ For now, take a look at [`chrome-tabs-dark-theme.css`](./src/css/chrome-tabs-dar
 
 ## How it works
 TODO: How tabs are rendered in three parts for allowing other heights and varying width.
+
 TODO: row-reverse flex-direction. For avoiding z-index issues with transition.
+
 TODO: Delegation of interation logic to `vue-dnd-list`.
 
 ### Transitions/animations
@@ -24,9 +26,7 @@ TODO: Delegation of interation logic to `vue-dnd-list`.
 Because the behavior of `transition-group` in Vue did not satisfy the requirements of `vue-dnd-list` (mid-transition swapping using custom transition values and -times), it had to use individual `transition` components with custom move logic.
 As it turns out, they don't work too well when used in `v-for`, preventing both `enter` and `leave` transitions from working properly.
 For that reason, `vue-chromish-tabs` handles opening/closing transitions itself.
-__
-It is the intention to remove the use of `transition` from `vue-dnd-list`, hopefully making it more of a renderless component that simply extracts sorting logic away from `vue-chromish-tabs`.
-__
+_It is the intention to remove the use of `transition` from `vue-dnd-list`, hopefully making it more of a renderless component that simply extracts sorting logic away from `vue-chromish-tabs`._
 
 The opening animation is simply done by applying the animation class and removing it when the animation is done.
 
