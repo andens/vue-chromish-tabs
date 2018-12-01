@@ -4,7 +4,7 @@
 }
 .chrome-tabs.chrome-tabs-dark-theme .chrome-tabs-bottom-bar {
   background: #505050;
-  border-top: 1px solid rgba(0,0,0,0.5);
+  border-top: 1px solid rgba(0,0,0,0.6);
 }
 .chrome-tabs.chrome-tabs-dark-theme .chrome-tab .chrome-tab-background > svg .chrome-tab-shadow {
   stroke: rgba(0,0,0,0.5);
