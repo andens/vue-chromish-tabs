@@ -1,6 +1,6 @@
 .chrome-tabs.chrome-tabs-dark-theme {
-  background: #1b1d1f;
-  box-shadow: 0 0.05em #282828;
+  /* background: #1b1d1f; */
+  box-shadow: 0 0.6px #282828;
 }
 .chrome-tabs.chrome-tabs-dark-theme .chrome-tabs-bottom-bar {
   background: #505050;
@@ -17,7 +17,7 @@
 }
 .chrome-tabs.chrome-tabs-dark-theme .chrome-tab .chrome-tab-content {
   -webkit-font-smoothing: antialiased;
-  color: #fff;
+  color: #ccc;
 }
 .chrome-tabs.chrome-tabs-dark-theme .chrome-tab .chrome-tab-close:not(:hover)::before {
   content: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14'><path stroke='#cfcfcf' stroke-linecap='round' stroke-width='1.125' d='M4 4 L10 10 M10 4 L4 10'></path></svg>");
