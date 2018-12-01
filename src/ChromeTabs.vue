@@ -54,8 +54,11 @@
           @mousedown.left.native.prevent="e => {
             if (canSelectTab) {
               selectTab(tabs.length - index - 1);
-              startDrag(e);
-              canSelectTab = false;
+
+              if (!isAnyTabClosing) {
+                startDrag(e);
+                canSelectTab = false;
+              }
             }
           }"
           @close="closeTab(tabs.length - index - 1)"
@@ -126,6 +129,7 @@ export default {
       accumulatedTabCount: 0,
       canSelectTab: true,
       leaveDuration: 200,
+      numberOfClosingTabs: 0,
     }
   },
 
@@ -137,6 +141,10 @@ export default {
       set(newValue) {
         this.tabs = newValue.slice().reverse();
       },
+    },
+
+    isAnyTabClosing() {
+      return this.numberOfClosingTabs > 0;
     },
   },
 
@@ -234,6 +242,8 @@ export default {
     },
 
     closeTab(index) {
+      this.numberOfClosingTabs++;
+
       let selectToTheRight = index => {
         let len = this.tabs.length;
         let newIndex = index;
@@ -317,6 +327,8 @@ export default {
             this.$refs.tabsContent.getScrollContainer().scrollLeft = scrollLeft;
           });
         }
+
+        this.numberOfClosingTabs--;
       }, this.leaveDuration);
 
       this.$emit("close", {
