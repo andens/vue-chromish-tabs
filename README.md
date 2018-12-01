@@ -5,7 +5,19 @@ Chrome-inspired tabs with horizontal scroll and client-defined contents.
 This code is written with intent to use it in Electron applications.
 Browser compatibility is for that reason not considered.
 
+Inspired by and adapted from [`chrome-tabs`](https://github.com/adamschwartz/chrome-tabs).
+
+TODO: Demo/example code.
+Possibly a gif of some kind.
+
+## Theming
+TODO: Write a sentence or two about how to theme it.
+For now, take a look at [`chrome-tabs-dark-theme.css`](./src/css/chrome-tabs-dark-theme.css) for an idea of what can be done.
+
 ## How it works
+TODO: How tabs are rendered in three parts for allowing other heights and varying width.
+TODO: row-reverse flex-direction. For avoiding z-index issues with transition.
+TODO: Delegation of interation logic to `vue-dnd-list`.
 
 ### Transitions/animations
 
