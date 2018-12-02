@@ -56,6 +56,7 @@
               selectTab(tabs.length - index - 1);
 
               if (!isAnyTabClosing) {
+                sortStartIndex = tabs.length - index - 1;
                 startDrag(e);
                 canSelectTab = false;
               }
@@ -130,6 +131,7 @@ export default {
       canSelectTab: true,
       leaveDuration: 200,
       numberOfClosingTabs: 0,
+      sortStartIndex: null,
     }
   },
 
@@ -337,8 +339,15 @@ export default {
       });
     },
 
-    sortEnd() {
+    sortEnd(wasSortingActive) {
+      if (wasSortingActive) {
+        this.$emit("move", {
+          from: this.sortStartIndex,
+          to: this.tabs.indexOf(this.selected),
+        });
+      }
       this.canSelectTab = true;
+      this.sortStartIndex = null;
     },
   },
 
