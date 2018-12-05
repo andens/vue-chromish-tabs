@@ -1,9 +1,9 @@
 <template>
   <div class="chrome-tabs">
+    <div class="chrome-tabs-bottom-bar"></div>
     <div class="fixed-content">
       <slot name="fixed-content" />
     </div>
-    <div class="chrome-tabs-bottom-bar"></div>
     <div class="tabs-container-wrapper">
       <!--
         I tried some pre-existing dnd libraries, but they were usually limited
@@ -114,6 +114,8 @@ const ChromeTab = {
     </div>
   `,
 };
+
+export { ChromeTab };
 
 export default {
   data() {
